@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Home from './page/home';
 import Login from './page/login';
 import Error from './page/error';
+import Layout from './page/layout';
 
 export default () => {
     const state = useSelector(state=>state);
@@ -17,10 +18,12 @@ export default () => {
     });
 
     return (<Router>
-        <Switch>
-            <Route path='/' component={Home} exact={true}/>
-            <Route path='/login' component={Login} exact={true}/>          
-            <Route path='/' component={Error} />
-        </Switch>
+        <Layout>
+            <Switch>
+                <Route path='/' component={Home} exact={true}/>
+                <Route path='/login' component={Login} exact={true}/>          
+                <Route path='/' component={Error} />
+            </Switch>
+        </Layout>
     </Router>);
 }

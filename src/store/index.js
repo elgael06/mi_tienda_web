@@ -1,12 +1,15 @@
 import { createStore, combineReducers } from "redux";
 
 
+
 export const initialStore = {
-    user : {
+    user : localStorage.sesion_app ? JSON.parse(localStorage.sesion_app) : {
         id      : null,
         name    : '',
         email   : '',
-        photo   : ''
+        photo   : '',
+        googleUser : false,
+        credential:null
     },
     data:{
         access:[],
@@ -17,8 +20,10 @@ export const initialStore = {
 const user = (state= initialStore.user,actions) => {
     switch (actions.type) {
         case 'ADD_USER':
+            localStorage.setItem('sesion_app',JSON.stringify(actions.user));
             return actions.user;
         case 'REMOVE_USER':
+            localStorage.removeItem('sesion_app');
             return initialStore.user;
         default:
             return state;

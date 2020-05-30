@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+.MuiAppBar-colorPrimary{
+  background-color: #5d1979 !important;
+}
+.user_drawer-bar{
+  background-color: #5d1979 !important;
+  color: #FFF !important;
+}
