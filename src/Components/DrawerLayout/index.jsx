@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import usuarioMale from '../../assets/img/UserMale.webp';
 import rutas_accesos from '../../constant/rutas_accesos';
 import { useSelector } from 'react-redux';
+import { ArrowRight } from '@material-ui/icons';
 
 const DrawerLayout = ({settoggleDrawer,toggleDrawer})=>{
     const { user } = useSelector(state => state);
@@ -46,6 +47,13 @@ const DrawerLayout = ({settoggleDrawer,toggleDrawer})=>{
             }}
             onClick={handleToggleDrawer(false)}>                
             <List>  
+            <ListItem>
+                <ListItemIcon >
+                    <ArrowRight />
+                </ListItemIcon>
+                <ListItemText primary='Menu' />
+            </ListItem>
+            <Divider />
                 { user.id ? rutas_accesos
                 .filter(e=>e.icon!=null).map(e=><Fragment key={e.url}>
                     <ListItem  button onClick={()=>redirect(e.url)}>
@@ -54,7 +62,6 @@ const DrawerLayout = ({settoggleDrawer,toggleDrawer})=>{
                         </ListItemIcon>
                         <ListItemText primary={e.url}/>
                     </ListItem>
-                    <Divider />
                 </Fragment>) :  <ListItem>
                     <ListItemText primary='No Tiene accesos!' secondary='Pida Acceso o inicie sesion.' />
                 </ListItem>}

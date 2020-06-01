@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, StrictMode } from 'react';
 import {
     BrowserRouter as Router,
      Switch,
@@ -23,7 +23,9 @@ export default () => {
     return (<Router>
         <Layout>
             <Switch>
+                <StrictMode>
                 { state.user.id ? <HomeRoute /> : <LoginRoute /> }
+                </StrictMode>
             </Switch>
         </Layout>
     </Router>);
@@ -32,20 +34,29 @@ export default () => {
 const HomeRoute = () =>{
     const location = useLocation();
 
-    const undefineUrl = () => rutas_accesos.findIndex(e=>e.url==location.pathname)>-1;
+    const parametroRuta = (ruta='/') =>{
+        const url = ruta.split('/')[1];
+        
+        return url;
+    }
+
+    const undefineUrl = () => rutas_accesos.findIndex(e=>parametroRuta(e.url) === parametroRuta(location.pathname)) > -1;
 
    return (<Fragment>
     {
-        rutas_accesos.map(route=><Route
-            key         = {route.url} 
-            path        = {route.url} 
-            component   = {route.component} 
-            exact       = {route.exact}
-        />)
+        rutas_accesos.map(route=>{
+            console.log(route);            
+            return(<Route
+                key         = {route.url} 
+                path        = {route.url} 
+                children    = {<route.component />} 
+                exact      
+            />)
+        })
     }
     <Route path='/' component={()=><Redirect to='/Home' />} exact={true}/>
     {
-        undefineUrl() || <Route path='/' component={Error} />
+        undefineUrl() || <Route path='*' component={Error} />
     }
 </Fragment>);
 }
@@ -54,3 +65,4 @@ const LoginRoute =()=>(<Fragment>
     <Route path='/login' component={Login} exact={true}/>  
     <Redirect to='/login' />
 </Fragment>);
+

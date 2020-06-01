@@ -1,6 +1,9 @@
 import React from 'react';
 import home from "../page/home";
 import { Home, Business, People, Info, EmojiPeople, BusinessCenterRounded } from "@material-ui/icons";
+import Empresa from '../page/Empresa';
+import AddEmpresa from '../page/Empresa/AddEmpresa';
+import IdEmpresa from '../page/Empresa/IdEmpresa';
 
 const rutas_accesos = [
     {
@@ -10,20 +13,20 @@ const rutas_accesos = [
         icon:<Home />,
     },
     {
-        url:'/Empresas',
-        component:()=><span>Empresas</span>,
+        url:'/Empresa',
+        component:Empresa,
         exact:true,
         icon:<Business/>
     },
     {
-        url:'/Empresas/Nueva',
-        component:()=><span>Nueva Empresa</span>,
+        url:'/Empresa/Nueva',
+        component:AddEmpresa,
         exact:true,
         icon:<BusinessCenterRounded />
     },
     {
-        url:'/Empresas:id',
-        component:()=><span>Empresa</span>,
+        url:'/Empresa/:id',
+        component:IdEmpresa,
         exact:true,
         icon:null
     },
@@ -34,7 +37,7 @@ const rutas_accesos = [
         icon:<People />
     },
     {
-        url:'/Usuarios:id',
+        url:'/Usuarios/:id',
         component:()=><span>Usuario</span>,
         exact:true,
         icon:null

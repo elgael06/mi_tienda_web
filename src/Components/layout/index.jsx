@@ -23,7 +23,7 @@ export default function Layout({children}){
             settoggleDrawer={settoggleDrawer}
             toggleDrawer={toggleDrawer}
         />
-        <main style={{padding:20}}>{children}</main>
+        <main>{children}</main>
         <Snackbar 
             open={snackBar.show} 
             autoHideDuration={5000} 
