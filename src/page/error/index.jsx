@@ -3,6 +3,6 @@ import React from 'react';
 export default () =>{
 
     return(<div>
-        <span>Page Error, NOT FOUND !!!</span>
+        <b style={{color:'red'}}>ERROR, PAGE NOT FOUND !!!</b>
     </div>);
 }

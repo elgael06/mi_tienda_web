@@ -1,5 +1,5 @@
 export default class UsuarioGoogle {
-    constructor(res){
+    get(res){
         console.log(res);
         
         this.uid         = res.uid;
@@ -7,8 +7,8 @@ export default class UsuarioGoogle {
         this.email       = res.email;
         this.foto        = res.foto;
         this.credential  = res.credential;
-
     }
+    
     uid         = '';
     displayName = '';
     email       = '';      

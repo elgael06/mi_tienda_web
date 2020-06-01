@@ -20,26 +20,30 @@ let firebaseConfig ={
 
 firebase.initializeApp(firebaseConfig);
 
-export const inicioSesionGoogle = async () =>{
-  try{
-    let provider  = new firebase.auth.GoogleAuthProvider();
-    let usuario   = await firebase.auth().signInWithPopup(provider);
-    if(usuario){
-      const {user, credential} = usuario;
-      
-      return new UsuarioGoogle({
-        uid         :user.uid,
-        displayName :user.displayName,
-        email       :user.email,
-        foto        :user.photoURL,
-        credential
-    });;
-    }
-}
-catch(error) {
-	console.error('error',error);
-	
-}
+export const inicioSesionGoogle = async () =>{		
+	const res = new UsuarioGoogle();
 
-return null;
+  	try{
+		let provider  = new firebase.auth.GoogleAuthProvider();
+		let usuario   = await firebase.auth().signInWithPopup(provider);
+
+		if(usuario){
+			const {user, credential} = usuario;	
+			res.get({
+				uid         :user.uid,
+				displayName :user.displayName,
+				email       :user.email,
+				foto        :user.photoURL,
+				credential
+			});
+    	}
+	} catch(error) {
+		console.error('error',error);
+		return res;
+	}
+
+	return res;
+}
+export const cerrarSesionGogle = async ()=>{
+    await firebase.auth().signOut()
 }
