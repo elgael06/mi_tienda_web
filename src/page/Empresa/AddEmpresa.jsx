@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import { Card, CardHeader, CardContent, TextField, Button } from '@material-ui/core';
-import { ImageOutlined } from '@material-ui/icons';
+import { Card, CardHeader, CardContent, TextField, Button, CircularProgress } from '@material-ui/core';
+import { insert } from '../../services/conections';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const AddEmpresa = () =>{
 
@@ -15,62 +17,113 @@ const AddEmpresa = () =>{
 }
 
 export const FormEmpresa = () => {
-    const [foto,setfoto] =useState('')
+    const dispatch = useDispatch(); 
+    const {empresaSelect, user} = useSelector(state=>state);
+    const [foto,setfoto]        = useState('');
+    const [disable,setdisable]  = useState(true);
+    const [load,setload]        = useState(false);
+    const history               = useHistory();
+
+    const checarValor = () =>{
+        let index = 0;
+
+        for(let dato in empresaSelect){
+            index +=  empresaSelect[dato]!=='' ? 1 : 0; 
+        }
+        console.log(index!==6);
+        setdisable(index!==6);
+    }
+
+    const enviarDatos = async () =>{
+        setload(true)
+        const id = await insert().empresa({
+            ...empresaSelect,
+            email : user.email,
+            uid	  : user.id,	
+        });
+
+        await dispatch({
+            type:'SHOW_ACTION',
+            mesaje:{
+                show:true,
+                message:`Empresa Guardada con id = ${id}.`,
+                severity:'success',
+                actionsText:'cerrar'
+            }
+        });
+
+        await dispatch({type:'EMPRESA_DEFAULT'});
+        setload(false);
+        setdisable(false);
+        history.push('/Empresa');
+    }
+
+    const handleNombre = e => dispatch({type:e.target.name,value:e.target.value});
+    const handleImage = () => {
+        dispatch({type:'EMPRESA_FOTO',value:'https://comunidad.iebschool.com/iebs/files/2015/04/employer-branding.png'})
+    }
 
     return(<div className='form-empresa' style={{textAlign:'left',padding:'0 30px'}}>
         <h4>Datos de La Empresa</h4>
         <TextField
-
-            label='Nombre'
-            variant='outlined'
-            style={{marginRight:30,width:320}}
+            name     = 'EMPRESA_NOMBRE'
+            onChange = {handleNombre}
+            onBlur   = {checarValor}
+            value    = {empresaSelect.nombre}
+            label    = 'Nombre'
+            variant  = 'outlined'
+            style    = {{marginRight:30,width:320}}
         />
         <TextField
-            label='Telefono'
-            type='phone'
-            variant='outlined'
-            InputProps={{
-                step:10
-            }}
-            style={{marginRight:30,width:188}}
+            name     = 'EMPRESA_TEL'
+            onChange = {handleNombre}
+            onBlur   = {checarValor}
+            label    = 'Telefono'
+            type     = 'phone'
+            variant  = 'outlined'
+            style    = {{marginRight:30,width:188}}
         />
-        <Button style={{
-                height:56,
-                marginTop:10,
-                width:139
+        <Button style   = {{
+                height    : 56,
+                marginTop : 10,
+                width     : 139
             }}
-            color='secondary'
-            variant="outlined"
-            onClick={()=>setfoto('https://comunidad.iebschool.com/iebs/files/2015/04/employer-branding.png')}
+            color   = 'secondary'
+            variant = "outlined"
+            onClick = {handleImage}
         >
-            {foto ? <img alt='foto Empresa'height='46' src={foto} />
-            : 'foto Empresa'}
+            {empresaSelect.foto ? <img alt='foto Empresa'height='46' src={empresaSelect.foto} /> : 'foto Empresa'}
         </Button>
 
         <TextField
-            label='direccion'
-            variant='outlined'
-            style={{marginRight:30,width:320}}
+            name     = 'EMPRESA_DIR'
+            onChange = {handleNombre}
+            onBlur   = {checarValor}
+            label    = 'direccion'
+            variant  = 'outlined'
+            style    = {{marginRight:30,width:320}}
         />  
         <TextField
-            label='# Numero'
-            type='number'
-            variant='outlined'
-            InputProps={{
-                step:10
-            }}
-            style={{marginRight:30,width:188}}
+            name     = 'EMPRESA_NUM'
+            onChange = {handleNombre}
+            onBlur   = {checarValor}
+            label    = '# Numero'
+            type     = 'number'
+            variant  = 'outlined'
+            style    = {{marginRight:30,width:188}}
         />
-        <Button 
-            color='primary' 
-            style={{
-                height:56,
-                marginTop:10,
-                width:139
+        {load ? <CircularProgress /> : <Button 
+            color   = 'primary' 
+            style   = {{
+                height    : 56,
+                marginTop : 10,
+                width     : 139
             }}
-            variant='contained'>
+            disabled={disable}            
+            onClick  = {enviarDatos}
+            variant  ='contained'>
             Guardar
-        </Button>
+        </Button> }
     </div>);
 }
 

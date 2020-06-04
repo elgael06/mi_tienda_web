@@ -1,11 +1,9 @@
-
-
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import UsuarioGoogle from "../models/usuarioGoogle";
 
-let firebaseConfig ={
+const firebaseConfig ={
   apiKey            : "AIzaSyBl4RoPkOCb-WI8_NlnGvWCe0zRjXXwR_8",
   authDomain        : "mi-tienda-web.firebaseapp.com",
   databaseURL       : "https://mi-tienda-web.firebaseio.com",
@@ -15,8 +13,6 @@ let firebaseConfig ={
   appId             : "1:526687941999:web:293b3085ab0c4d84ac649a",
   measurementId     : "G-ZW8GPJKR34"
   };
-
-
 
 firebase.initializeApp(firebaseConfig);
 
@@ -47,3 +43,6 @@ export const inicioSesionGoogle = async () =>{
 export const cerrarSesionGogle = async ()=>{
     await firebase.auth().signOut()
 }
+
+
+export default firebase;

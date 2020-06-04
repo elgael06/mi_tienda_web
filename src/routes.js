@@ -44,13 +44,12 @@ const HomeRoute = () =>{
 
    return (<Fragment>
     {
-        rutas_accesos.map(route=>{
-            console.log(route);            
+        rutas_accesos.map(route=>{        
             return(<Route
-                key         = {route.url} 
-                path        = {route.url} 
-                children    = {<route.component />} 
-                exact      
+                key      = {route.url} 
+                path     = {route.url} 
+                children = {<route.component />} 
+                exact    = {route.exact}
             />)
         })
     }

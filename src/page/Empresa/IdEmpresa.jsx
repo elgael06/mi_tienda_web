@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom';
 
 const IdEmpresa = () =>{
     const { id } = useParams();
-    let paraneter = parseInt(id)|| '';;
-
-    console.log(Number.isInteger(paraneter),paraneter)
+    let paraneter = parseInt(id)|| '';
 
     return Number.isInteger(paraneter) ? (<center>
         <Card elevation={5} variant='elevation' style={{maxWidth:900,minHeight:400}}>
