@@ -23,7 +23,7 @@ export const initialStore = {
         severity:'info',
         actionsText:''
     },
-    empresa :{
+    empresaSelect :{
         id          : null,
         nombre 		: '',
         telefono 	: '',
@@ -80,7 +80,7 @@ const data = (state= initialStore.data,actions) => {
     }
 };
 
-const empresaSelect = (state = initialStore.empresa ,actions) =>{
+const empresaSelect = (state = initialStore.empresaSelect ,actions) =>{
     switch (actions.type) {
         case 'EMPRESA_ID'     : return {...state, id : actions.value};
         case 'EMPRESA_NOMBRE' : return {...state, nombre : actions.value};   
@@ -88,13 +88,14 @@ const empresaSelect = (state = initialStore.empresa ,actions) =>{
         case 'EMPRESA_FOTO'   : return {...state, foto : actions.value};   
         case 'EMPRESA_DIR'    : return {...state, direccion : actions.value};   
         case 'EMPRESA_NUM'    : return {...state, numero : actions.value};    
+        case 'EMPRESA_EDITAR' : return actions.value;
         case 'EMPRESA_DEFAULT': return {
-                id          : null,
-                name        : '',
-                email       : '',
-                photo       : '',
-                googleUser  : false,
-                credential  : null
+            id          : null,
+            nombre 		: '',
+            telefono 	: '',
+            foto		: '',
+            direccion	: '',
+            numero		: '',
         };       
         default               : return state;
     }
@@ -113,7 +114,8 @@ const reducers = combineReducers({
     data,
     loading,
     snackBar,
-    empresaSelect
+    empresaSelect,
+    empresas_lista
 });
 
 export default createStore(reducers,initialStore);

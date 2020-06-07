@@ -33,20 +33,22 @@ export const insert = () => ({
 export const select = (id_usuario) => ({
     async empresas(){
         const lista =[];
-        // const lista_datos = EMPRESAS.where('uid',"==",id_usuario);
-        // lista_datos.get().then(e=>{
-        //     e.forEach(res=>console.log(res))
-        //     console.log(e)
-        // })
-        // lista_datos.onSnapshot(e=>console.log(e))
         const querySnapt = await EMPRESAS.where('uid',"==",id_usuario).get();
         querySnapt.forEach(doc=>{
-            lista.push(doc.data());
+            lista.push({...doc.data(),id:doc.id});
         });       
         return lista;
     },
-    empresa_id(id){
-
+    async empresa_id(id){
+		let value  = await EMPRESAS.doc(id).get();
+		console.log({...value.data(),id:value.id});      
+        return {...value.data(),id:value.id};
     },
 });
 
+export const update = () =>({
+	async empresa(value){
+		await EMPRESAS.doc(value.id).update(value);
+		return value.id
+	}
+});

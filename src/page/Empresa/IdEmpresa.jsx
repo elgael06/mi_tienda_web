@@ -1,16 +1,28 @@
-import React  from 'react';
+import React, { useEffect, useState }  from 'react';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { select } from '../../services/conections';
+import { useDispatch, useSelector } from 'react-redux';
+import { FormEmpresa } from './AddEmpresa';
 
 const IdEmpresa = () =>{
-    const { id } = useParams();
-    let paraneter = parseInt(id)|| '';
+    const dispatch              = useDispatch(); 
+    const {empresaSelect, user} = useSelector(state=>state);
+    const { id }                = useParams();
 
-    return Number.isInteger(paraneter) ? (<center>
+    useEffect(()=>{
+        cargarEmpresa()
+    },[]);
+    const cargarEmpresa = async () =>{
+        const value = await select().empresa_id(id);
+        await dispatch({type:'EMPRESA_EDITAR',value});
+    }
+
+    return id!='Nueva' ? (<center>
         <Card elevation={5} variant='elevation' style={{maxWidth:900,minHeight:400}}>
-            <CardHeader title={`Empresa: ${paraneter}.`} />
+            <CardHeader title={`ID Empresa: ${empresaSelect.id}.`} />
             <CardContent>
-                Contenido
+                <FormEmpresa idEmpresa={id} />
             </CardContent>
         </Card>
     </center>) : null;

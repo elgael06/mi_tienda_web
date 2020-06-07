@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Card, CardHeader, CardContent, TextField, Button, CircularProgress } from '@material-ui/core';
-import { insert } from '../../services/conections';
+import { insert, update } from '../../services/conections';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -16,10 +16,9 @@ const AddEmpresa = () =>{
     </center>)
 }
 
-export const FormEmpresa = () => {
+export const FormEmpresa = ({idEmpresa='Nuevo'}) => {
     const dispatch = useDispatch(); 
     const {empresaSelect, user} = useSelector(state=>state);
-    const [foto,setfoto]        = useState('');
     const [disable,setdisable]  = useState(true);
     const [load,setload]        = useState(false);
     const history               = useHistory();
@@ -30,38 +29,38 @@ export const FormEmpresa = () => {
         for(let dato in empresaSelect){
             index +=  empresaSelect[dato]!=='' ? 1 : 0; 
         }
-        console.log(index!==6);
-        setdisable(index!==6);
+        console.log('disable',index<6,index);
+        setdisable(index<6);
     }
+
+    const saveResponse = async data => await idEmpresa=='Nuevo' ? insert().empresa(data) : update().empresa(data);
 
     const enviarDatos = async () =>{
         setload(true)
-        const id = await insert().empresa({
+        let val = {
             ...empresaSelect,
             email : user.email,
             uid	  : user.id,	
-        });
-
-        await dispatch({
+        }
+        saveResponse(val)
+        .then(e=>dispatch({
             type:'SHOW_ACTION',
             mesaje:{
                 show:true,
-                message:`Empresa Guardada con id = ${id}.`,
+                message:`Empresa Guardada con id = ${e}.`,
                 severity:'success',
                 actionsText:'cerrar'
             }
-        });
+        }))
 
-        await dispatch({type:'EMPRESA_DEFAULT'});
+        dispatch({type:'EMPRESA_DEFAULT'});
         setload(false);
         setdisable(false);
         history.push('/Empresa');
     }
 
     const handleNombre = e => dispatch({type:e.target.name,value:e.target.value});
-    const handleImage = () => {
-        dispatch({type:'EMPRESA_FOTO',value:'https://comunidad.iebschool.com/iebs/files/2015/04/employer-branding.png'})
-    }
+    const handleImage = () => dispatch({type:'EMPRESA_FOTO',value:'https://comunidad.iebschool.com/iebs/files/2015/04/employer-branding.png'});
 
     return(<div className='form-empresa' style={{textAlign:'left',padding:'0 30px'}}>
         <h4>Datos de La Empresa</h4>
@@ -77,6 +76,7 @@ export const FormEmpresa = () => {
         <TextField
             name     = 'EMPRESA_TEL'
             onChange = {handleNombre}
+            value    = {empresaSelect.telefono}
             onBlur   = {checarValor}
             label    = 'Telefono'
             type     = 'phone'
@@ -99,6 +99,7 @@ export const FormEmpresa = () => {
             name     = 'EMPRESA_DIR'
             onChange = {handleNombre}
             onBlur   = {checarValor}
+            value    = {empresaSelect.direccion}
             label    = 'direccion'
             variant  = 'outlined'
             style    = {{marginRight:30,width:320}}
@@ -107,6 +108,7 @@ export const FormEmpresa = () => {
             name     = 'EMPRESA_NUM'
             onChange = {handleNombre}
             onBlur   = {checarValor}
+            value    = {empresaSelect.numero}
             label    = '# Numero'
             type     = 'number'
             variant  = 'outlined'
